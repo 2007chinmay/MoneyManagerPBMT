@@ -1,6 +1,6 @@
 {
-  "name": "Money Manager",
-  "short_name": "Money",
+  "name": "PBMT",
+  "short_name": "PBMT",
   "start_url": ".",
   "display": "standalone",
   "background_color": "#ffffff",
