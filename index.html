@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PBMT</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- SIDEBAR / NAV -->
+  <nav class="sidebar">
+    <div class="logo">PBMT</div>
+    <a href="#home" class="nav-link active" data-page="home">&#9783; Overview</a>
+    <a href="#entries" class="nav-link" data-page="entries">&#9776; Entries</a>
+    <a href="#add-expense" class="nav-link" data-page="add-expense">&#43; Record Expense</a>
+    <a href="#add-balance" class="nav-link" data-page="add-balance">&#9775; Update Balance</a>
+  </nav>
+
+  <!-- MOBILE TOP BAR -->
+  <div class="mobile-header">
+    <span class="logo">PBMT</span>
+    <div class="mobile-nav">
+      <a href="#home" class="nav-link active" data-page="home">Overview</a>
+      <a href="#entries" class="nav-link" data-page="entries">Entries</a>
+      <a href="#add-expense" class="nav-link" data-page="add-expense">+ Expense</a>
+      <a href="#add-balance" class="nav-link" data-page="add-balance">Balance</a>
+    </div>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <main class="main-content">
+
+    <!-- HOME PAGE -->
+    <section id="page-home" class="page active">
+      <header>
+        <h1>Overview</h1>
+        <p class="subtitle">A summary of your current financial standing.</p>
+      </header>
+
+      <div class="stat-cards">
+        <div class="card card-primary">
+          <div class="card-label">TOTAL BALANCE</div>
+          <div class="card-value" id="total-balance">₹0.00</div>
+        </div>
+        <div class="card">
+          <div class="card-label">TOTAL SPENT</div>
+          <div class="card-value" id="total-spent">₹0.00</div>
+          <div class="card-sub" id="tx-count">0 transactions</div>
+        </div>
+        <div class="card">
+          <div class="card-label">TOP CATEGORY</div>
+          <div class="card-value card-value-sm" id="top-category">None</div>
+          <div class="card-sub" id="top-category-amount"></div>
+        </div>
+      </div>
+
+      <div class="charts-grid">
+        <div class="chart-box">
+          <h3>Spending by Category</h3>
+          <div class="chart-wrap">
+            <canvas id="pie-chart" width="220" height="220"></canvas>
+            <div id="pie-legend" class="legend"></div>
+          </div>
+          <div id="pie-empty" class="chart-empty hidden">No spending data yet.</div>
+        </div>
+        <div class="chart-box">
+          <h3>Balance Distribution</h3>
+          <canvas id="bar-chart" width="300" height="180"></canvas>
+          <div id="bar-empty" class="chart-empty hidden">No balance data yet.</div>
+        </div>
+      </div>
+
+      <div class="section">
+        <h3>Recent Entries</h3>
+        <div id="recent-list" class="entry-list"></div>
+        <div id="recent-empty" class="empty-state hidden">No recent expenses yet.</div>
+      </div>
+    </section>
+
+    <!-- ENTRIES PAGE -->
+    <section id="page-entries" class="page">
+      <header class="page-header-row">
+        <div>
+          <h1>Entries</h1>
+          <p class="subtitle">Review your logged expenses.</p>
+        </div>
+        <div class="filter-row">
+          <select id="filter-category" class="select-input">
+            <option value="all">All Categories</option>
+            <option value="food">Food</option>
+            <option value="travel">Travel</option>
+            <option value="work">Work</option>
+            <option value="others">Others</option>
+          </select>
+          <select id="filter-method" class="select-input">
+            <option value="all">All Methods</option>
+            <option value="cash">Cash</option>
+            <option value="upi">UPI</option>
+            <option value="bank">Bank</option>
+          </select>
+        </div>
+      </header>
+      <div id="entries-list" class="entry-list card-list"></div>
+      <div id="entries-empty" class="empty-state hidden">
+        <p class="empty-title">No entries found</p>
+        <p>You haven't logged any expenses yet.</p>
+      </div>
+    </section>
+
+    <!-- ADD EXPENSE PAGE -->
+    <section id="page-add-expense" class="page">
+      <header>
+        <h1>Record Expense</h1>
+        <p class="subtitle">Log a new transaction. Saved locally on this device.</p>
+      </header>
+      <div class="form-card">
+        <form id="expense-form" class="form">
+          <div class="form-grid">
+            <div class="form-group">
+              <label>Amount (₹)</label>
+              <input type="number" id="exp-amount" step="0.01" placeholder="0.00" required class="text-input" />
+            </div>
+            <div class="form-group">
+              <label>Date</label>
+              <input type="date" id="exp-date" required class="text-input" />
+            </div>
+            <div class="form-group">
+              <label>Category</label>
+              <select id="exp-category" class="select-input" required>
+                <option value="food">Food &amp; Dining</option>
+                <option value="travel">Transport &amp; Travel</option>
+                <option value="work">Work &amp; Business</option>
+                <option value="others">Others</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Payment Method</label>
+              <select id="exp-method" class="select-input" required>
+                <option value="upi">UPI</option>
+                <option value="cash">Cash</option>
+                <option value="bank">Bank Transfer</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Note (Optional)</label>
+            <textarea id="exp-note" placeholder="What was this for?" class="textarea-input"></textarea>
+          </div>
+          <div class="form-actions">
+            <button type="button" class="btn btn-outline" onclick="navigate('home')">Cancel</button>
+            <button type="submit" class="btn btn-primary">Save Entry</button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <!-- ADD BALANCE PAGE -->
+    <section id="page-add-balance" class="page">
+      <header>
+        <h1>Update Balance</h1>
+        <p class="subtitle">Add money or set the exact balance for your accounts.</p>
+      </header>
+      <div class="two-col">
+        <div class="form-card">
+          <h2 class="form-section-title">Update Form</h2>
+          <form id="balance-form" class="form">
+            <div class="form-group">
+              <label>Account Type</label>
+              <select id="bal-type" class="select-input" required>
+                <option value="bank">Bank Account</option>
+                <option value="upi">UPI</option>
+                <option value="cash">Physical Cash</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>How to update</label>
+              <select id="bal-mode" class="select-input">
+                <option value="add">Add to existing balance</option>
+                <option value="set">Set exact balance</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Amount (₹)</label>
+              <input type="number" id="bal-amount" step="0.01" placeholder="0.00" required class="text-input" />
+            </div>
+            <div class="form-actions">
+              <button type="button" class="btn btn-outline" onclick="navigate('home')">Cancel</button>
+              <button type="submit" class="btn btn-primary">Update Balance</button>
+            </div>
+          </form>
+        </div>
+        <div>
+          <h2 class="form-section-title">Current Balances</h2>
+          <div id="balance-list" class="balance-list"></div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- DELETE CONFIRMATION MODAL -->
+  <div id="modal-overlay" class="modal-overlay hidden">
+    <div class="modal">
+      <h3>Delete Entry?</h3>
+      <p>This will permanently delete this expense record. This action cannot be undone.</p>
+      <div class="modal-actions">
+        <button class="btn btn-outline" onclick="closeModal()">Cancel</button>
+        <button class="btn btn-danger" id="confirm-delete-btn">Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST -->
+  <div id="toast" class="toast hidden"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>
